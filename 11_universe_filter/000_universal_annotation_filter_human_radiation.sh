@@ -24,7 +24,6 @@ outDir=$(dirname $1)
 log=$outDir/$1.$2.annot.log
 
 echo $1 $2 $3 $4 $5 > $log
-if false; then
 echo varscan somatic filtering >> $log
 (python /home/users/jhyouk/81_filter_test_LADC/11_universe_filter/00_varscan_somaticfilter.py ../09_varscan/$1.varscan.$2.vcf) &>> $log || { c=$?;echo "Error";exit $c; }
 echo done >> $log
@@ -42,7 +41,6 @@ echo "done" >>$log
 echo "filter1 using sample and germline information"  >>$log
 (python /home/users/jhyouk/81_filter_test_LADC/11_universe_filter/03_$2_filter1.py $1_$2_union_2.readinfo.readc.rasmy_PanelofNormal.vcf) &>> $log || { c=$?;echo "Error";exit $c; } #b6
 echo "done" >> $log
-fi
 
 echo "adjust coverage" >> $log
 (python /home/users/jhyouk/81_filter_test_LADC/11_universe_filter/06_coverage_decide_clonality_human.py $1_$2_union_2.readinfo.readc.rasmy_PanelofNormal.filter1.vcf $4 $1.mpileup.100kbcov.covstat) &>> $log || { c=$?;echo "Error";exit $c; }

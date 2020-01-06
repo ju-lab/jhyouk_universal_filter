@@ -17,9 +17,11 @@ log=$outDir/$1.SVprocessing.log
 
 # START
 echo $1 $3 $4 $5 > $log
+if false; then
 echo "start SV annotation from bcf combine"
 (bcftools concat -a -O v -o $outDir/$1.delly.vcf $rawDIR/$1.DEL.bcf $rawDIR/$1.DUP.bcf $rawDIR/$1.INS.bcf $rawDIR/$1.INV.bcf $rawDIR/$1.TRA.bcf) &>> $log || { c=$?;echo "Error";exit $c; }
 echo "done"
+fi
 
 echo "filter somatic"
 (python $srcDir/01.filter_somatic_delly.py $1.delly.vcf $tumor_col) &>> $log || { c=$?;echo "Error";exit $c; }

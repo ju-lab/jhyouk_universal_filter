@@ -1,7 +1,7 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[10]:
+# In[11]:
 
 
 #Arg1 = vcf_filename
@@ -9,14 +9,14 @@
 import sys
 
 input_fn = sys.argv[1]
-#input_fn = 'TCGA-05-4397.tumor_snp_union_2.readinfo.readc.rasmy_PanelofNormal.vcf'
+#input_fn = '/home/users/jhyouk/06_mm10_SNUH_radiation/31_2_SNP_updated_190315/mm_study4_SI_sham_SO3_snp_union_2.readinfo.readc.rasmy_PanelofNormal.vcf'
 
 input_file = file(input_fn)
 output_file = file(input_fn.replace('.vcf','.filter1.vcf'),'w')
 
 input_line = input_file.readline().strip()
 prev_chr = '0'
-
+nn=0
 while input_line[0:1] == '#':
     output_file.write(input_line + '\tpairedN_read\tPON\tT_vaf\tfilter1\n')
     input_line = input_file.readline().strip()
@@ -45,8 +45,10 @@ while input_line:
     else:
         if input_split[30] == 'NA':
             input_pon = 9
+            input_pon_numofsample=9
         else:
             input_pon = round(float(input_split[30].split(';')[6])/100,2)
+            input_pon_numofsample = int(input_split[30].split(';')[5])
 
         input_caller = input_split[6]
         
@@ -100,7 +102,7 @@ while input_line:
             
         if n_read >= 2:
             filter1='F'
-        elif input_pon >=0.04:
+        elif input_pon >=0.04 and input_pon_numofsample>=3:
             filter1='F'
         elif n_read == 1 and t_var_max <=9:
             filter1='F'
@@ -127,6 +129,8 @@ while input_line:
                 filter1='F'
         elif t_var_clip > 100:
             filter1='F'
+        #elif input_pon >=0.04:
+            #print input_split[0:2]
         else:
             filter1='T'
                 
@@ -136,4 +140,17 @@ while input_line:
     input_line = input_file.readline().strip()
 
 print 'The END'
+print nn
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
